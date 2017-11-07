@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,9 +19,7 @@ public class Frame2 extends JFrame {
     private JMenu jmA=new JMenu("About");
     private JMenuItem jmFExit=new JMenuItem("Exit");
     private JMenuItem jmFLoto=new JMenuItem("Loto");
-    private JMenuItem jmFKeyB=new JMenuItem("keyboard");
     private JInternalFrame jinFrame=new JInternalFrame();
-    private JInternalFrame jinFrame2=new JInternalFrame();
     private JDesktopPane jdktpane= new JDesktopPane();
     private JPanel jinPanlC=new JPanel(new GridLayout(1,6,5,5));
     private JLabel jlbLoto[]=new JLabel[6];
@@ -28,6 +28,16 @@ public class Frame2 extends JFrame {
     private JButton jinbtnGo=new JButton("Go");
     private Random rdm=new Random(System.currentTimeMillis());
     private LoginFrame log;
+    //internalFrame(keyboard)
+    private JInternalFrame jinFrameK=new JInternalFrame();
+//    private JDesktopPane jdtP= new JDesktopPane();
+    private JPanel conter=new JPanel(new GridLayout(4,3,5,5));
+    private JTextField jtf=new JTextField();
+    private JButton btn[]=new JButton[12];
+    private String data[]={"0","1","2","3","4","5","6","7","8","9"};
+    private JMenuItem jmFKeyB=new JMenuItem("keyboard");
+    //
+
 
     public Frame2(LoginFrame LoginFrame){
         log=LoginFrame;
@@ -39,7 +49,6 @@ public class Frame2 extends JFrame {
         this.setJMenuBar(jmb);
         this.setContentPane(jdktpane);
         jinFrame.setBounds(0,0,300,150);
-        jinFrame.setBounds(0,0,500,400);
         jmb.add(jmF);
         jmb.add(jmS);
         jmb.add(jmG);
@@ -54,6 +63,7 @@ public class Frame2 extends JFrame {
             jlbLoto[i]=new JLabel("null",JLabel.CENTER);
             jlbLoto[i].setFont(new Font("",Font.BOLD,24));
             jlbLoto[i].setBackground(new Color(175, 231,255));
+            jlbLoto[i].setOpaque(true);
             jinPanlC.add(jlbLoto[i]);
             jlbLoto[i].setBackground(new Color(255, 222, 185));
         }
@@ -61,6 +71,33 @@ public class Frame2 extends JFrame {
         jdktpane.add(jinFrame);
         jinFrame.add(BorderLayout.SOUTH,jinPanlS);
         jinPanlS.add(jinbtnClose);
+        //internalFrame(Keyboard)
+        jinFrameK.setBounds(0,0,300,370);
+        jinFrameK.setLayout(new BorderLayout(3,3));
+        jinFrameK.add(BorderLayout.NORTH,jtf);
+        jinFrameK.add(BorderLayout.CENTER,conter);
+        jdktpane.add(jinFrameK);
+        jtf.setEditable(false);
+
+        String tmp;
+        for(int i=0;i<10;i++){
+            int index=rdm.nextInt(8);
+            tmp=data[i];
+            data[i]=data[index];
+            data[index]=tmp;
+        }
+        for(int i=0;i<10;i++){
+            btn[i]=new JButton(data[i]);
+            conter.add(btn[i]);
+            btn[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JButton tempBtn= (JButton)e.getSource();
+                    jtf.setText(jtf.getText()+tempBtn.getText());
+                }
+            });
+        }
+        //
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -96,11 +133,37 @@ public class Frame2 extends JFrame {
                 setLoto();
             }
         });
+        btn[10]=new JButton("<");
+        conter.add(btn[10]);
+        btn[10].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                String tmp=jtf.getText().substring(0,jtf.getText().length()-1);
+                if(!jtf.getText().equals("")) {
+                    jtf.setText(jtf.getText().substring(0, jtf.getText().length() - 1));
+                }
+            }
+        });
+        btn[11]=new JButton("Clear");
+        conter.add(btn[11]);
+        btn[11].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jtf.setText("");
+            }
+        });
+        jmFKeyB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jinFrameK.setVisible(true);
+            }
+        });
+        //
 
     }
     private void setLoto(){
         for(int i=0;i<6;i++){
-            jlbLoto[i].setText(Integer.toString(rdm.nextInt(6)+1));
+            jlbLoto[i].setText(Integer.toString(rdm.nextInt(42)+1));
             for(int j=0;j<i;j++){
                 if(jlbLoto[i].getText().equals(jlbLoto[j].getText())){
                    i=i-1;
