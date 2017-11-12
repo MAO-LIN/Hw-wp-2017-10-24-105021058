@@ -36,6 +36,7 @@ public class Frame2 extends JFrame {
     private JButton btn[]=new JButton[12];
     private String data[]={"0","1","2","3","4","5","6","7","8","9"};
     private JMenuItem jmFKeyB=new JMenuItem("keyboard");
+    private JButton jinFrameKExit=new JButton("Exit");
     //
 
 
@@ -48,6 +49,7 @@ public class Frame2 extends JFrame {
         this.setBounds(screenW/2-600/2,screenH/2-450/2,600,450);
         this.setJMenuBar(jmb);
         this.setContentPane(jdktpane);
+        jdktpane.setBackground(new Color(0,0,0));
         jinFrame.setBounds(0,0,300,150);
         jmb.add(jmF);
         jmb.add(jmS);
@@ -78,6 +80,7 @@ public class Frame2 extends JFrame {
         jinFrameK.add(BorderLayout.CENTER,conter);
         jdktpane.add(jinFrameK);
         jtf.setEditable(false);
+        jinFrameK.add(BorderLayout.SOUTH,jinFrameKExit);
 
         String tmp;
         for(int i=0;i<10;i++){
@@ -156,6 +159,12 @@ public class Frame2 extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 jinFrameK.setVisible(true);
+            }
+        });
+        jinFrameKExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jinFrameK.setVisible(false);
             }
         });
         //
